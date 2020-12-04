@@ -1,0 +1,262 @@
+name,iso_code,dafif_code,planet
+"Bonaire, Saint Eustatius and Saba",BQ,RR,Earth
+Aruba,AW,AA,Earth
+Antigua and Barbuda,AG,AC,Earth
+United Arab Emirates,AE,AE,Earth
+Afghanistan,AF,AF,Earth
+Algeria,DZ,AG,Earth
+Azerbaijan,AZ,AJ,Earth
+Albania,AL,AL,Earth
+Armenia,AM,AM,Earth
+Angola,AO,AO,Earth
+American Samoa,AS,AQ,Earth
+Argentina,AR,AR,Earth
+Australia,AU,AS,Earth
+Ashmore and Cartier Islands,XX,AT,Earth
+Austria,AT,AU,Earth
+Anguilla,AI,AV,Earth
+Antarctica,AQ,AY,Earth
+Bahrain,BH,BA,Earth
+Barbados,BB,BB,Earth
+Botswana,BW,BC,Earth
+Bermuda,BM,BD,Earth
+Belgium,BE,BE,Earth
+Bahamas,BS,BF,Earth
+Bangladesh,BD,BG,Earth
+Belize,BZ,BH,Earth
+Bosnia and Herzegovina,BA,BK,Earth
+Bolivia,BO,BL,Earth
+Myanmar,MM,BM,Earth
+Benin,BJ,BN,Earth
+Belarus,BY,BO,Earth
+Solomon Islands,SB,BP,Earth
+Navassa Island,XX,BQ,Earth
+Brazil,BR,BR,Earth
+India,IN,BS,Earth
+Bhutan,BT,BT,Earth
+Bulgaria,BG,BU,Earth
+Bouvet Island,BV,BV,Earth
+Brunei Darussalam,BN,BX,Earth
+Burundi,BI,BY,Earth
+Canada,CA,CA,Earth
+Cambodia,KH,CB,Earth
+Chad,TD,CD,Earth
+Sri Lanka,LK,CE,Earth
+DR Congo,CD,CF,Earth
+Congo Republic,CG,CG,Earth
+China,CN,CH,Earth
+Chile,CL,CI,Earth
+Cayman Islands,KY,CJ,Earth
+Cocos (Keeling) Islands,CC,CK,Earth
+Cameroon,CM,CM,Earth
+Comoros,KM,CN,Earth
+Colombia,CO,CO,Earth
+Northern Mariana Islands,MP,CQ,Earth
+Coral Sea Islands,XX,CR,Earth
+Costa Rica,CR,CS,Earth
+Central African Republic,CF,CT,Earth
+Cuba,CU,CU,Earth
+Cabo Verde,CV,CV,Earth
+Cook Islands,CK,CW,Earth
+Cyprus,CY,CY,Earth
+Denmark,DK,DA,Earth
+Djibouti,DJ,DJ,Earth
+Dominica,DM,DO,Earth
+Jarvis Island,XX,DQ,Earth
+Dominican Republic,DO,DR,Earth
+Ecuador,EC,EC,Earth
+Egypt,EG,EG,Earth
+Ireland,IE,EI,Earth
+Equatorial Guinea,GQ,EK,Earth
+Estonia,EE,EN,Earth
+Eritrea,ER,ER,Earth
+El Salvador,SV,ES,Earth
+Ethiopia,ET,ET,Earth
+Europa Island,XX,EU,Earth
+Czech Republic,CZ,EZ,Earth
+French Guiana,GF,FG,Earth
+Finland,FI,FI,Earth
+Fiji,FJ,FJ,Earth
+Falkland Islands,FK,FK,Earth
+"Micronesia, Fed. Sts.",FM,FM,Earth
+Faeroe Islands,FO,FO,Earth
+French Polynesia,PF,FP,Earth
+Baker Island,XX,FQ,Earth
+France,FR,FR,Earth
+French Southern Territories,TF,FS,Earth
+Gambia,GM,GA,Earth
+Gabon,GA,GB,Earth
+Georgia,GE,GG,Earth
+Ghana,GH,GH,Earth
+Gibraltar,GI,GI,Earth
+Grenada,GD,GJ,Earth
+Guernsey,GG,GK,Earth
+Greenland,GL,GL,Earth
+Germany,DE,GM,Earth
+Glorioso Islands,XX,GO,Earth
+Guadeloupe,GP,GP,Earth
+Guam,GU,GQ,Earth
+Greece,GR,GR,Earth
+Guatemala,GT,GT,Earth
+Guinea,GN,GV,Earth
+Guyana,GY,GY,Earth
+Palestine,PS,GZ,Earth
+Haiti,HT,HA,Earth
+Hong Kong,HK,HK,Earth
+Heard and McDonald Islands,HM,HM,Earth
+Honduras,HN,HO,Earth
+Howland Island,XX,HQ,Earth
+Croatia,HR,HR,Earth
+Hungary,HU,HU,Earth
+Iceland,IS,IC,Earth
+Indonesia,ID,ID,Earth
+Isle of Man,IM,IM,Earth
+India,IN,IN,Earth
+British Indian Ocean Territory,IO,IO,Earth
+Clipperton Island,XX,IP,Earth
+Iran,IR,IR,Earth
+Israel,IL,IS,Earth
+Italy,IT,IT,Earth
+Cote d'Ivoire,CI,IV,Earth
+Iraq,IQ,IZ,Earth
+Japan,JP,JA,Earth
+Jersey,JE,JE,Earth
+Jamaica,JM,JM,Earth
+Jan Mayen,XX,JN,Earth
+Jordan,JO,JO,Earth
+Johnston Atoll,XX,JQ,Earth
+Juan de Nova Island,XX,JU,Earth
+Kenya,KE,KE,Earth
+Kyrgyz Republic,KG,KG,Earth
+North Korea,KP,KN,Earth
+Kingman Reef,XX,KQ,Earth
+Kiribati,KI,KR,Earth
+South Korea,KR,KS,Earth
+Christmas Island,CX,KT,Earth
+Kuwait,KW,KU,Earth
+Kazakhstan,KZ,KZ,Earth
+Laos,LA,LA,Earth
+Lebanon,LB,LE,Earth
+Latvia,LV,LG,Earth
+Lithuania,LT,LH,Earth
+Liberia,LR,LI,Earth
+Slovakia,SK,LO,Earth
+Palmyra Atoll,XX,LQ,Earth
+Lesotho,LS,LT,Earth
+Luxembourg,LU,LU,Earth
+Libya,LY,LY,Earth
+Madagascar,MG,MA,Earth
+Martinique,MQ,MB,Earth
+Macao,MO,MC,Earth
+Moldova,MD,MD,Earth
+Mayotte,YT,MF,Earth
+Mongolia,MN,MG,Earth
+Montserrat,MS,MH,Earth
+Malawi,MW,MI,Earth
+Montenegro,ME,MJ,Earth
+Macedonia,MK,MK,Earth
+Mali,ML,ML,Earth
+Monaco,MC,MN,Earth
+Morocco,MA,MO,Earth
+Mauritius,MU,MP,Earth
+Midway Islands,XX,MQ,Earth
+Mauritania,MR,MR,Earth
+Malta,MT,MT,Earth
+Oman,OM,MU,Earth
+Maldives,MV,MV,Earth
+Mexico,MX,MX,Earth
+Malaysia,MY,MY,Earth
+Mozambique,MZ,MZ,Earth
+New Caledonia,NC,NC,Earth
+Niue,NU,NE,Earth
+Norfolk Island,NF,NF,Earth
+Niger,NE,NG,Earth
+Vanuatu,VU,NH,Earth
+Nigeria,NG,NI,Earth
+Netherlands,NL,NL,Earth
+Norway,NO,NO,Earth
+Nepal,NP,NP,Earth
+Nauru,NR,NR,Earth
+Suriname,SR,NS,Earth
+Netherlands Antilles,AN,NT,Earth
+Nicaragua,NI,NU,Earth
+New Zealand,NZ,NZ,Earth
+Paraguay,PY,PA,Earth
+Pitcairn,PN,PC,Earth
+Peru,PE,PE,Earth
+Paracel Islands,XX,PF,Earth
+Spratly Islands,XX,PG,Earth
+Pakistan,PK,PK,Earth
+Poland,PL,PL,Earth
+Panama,PA,PM,Earth
+Portugal,PT,PO,Earth
+Papua New Guinea,PG,PP,Earth
+Palau,PW,PS,Earth
+Guinea-Bissau,GW,PU,Earth
+Qatar,QA,QA,Earth
+Serbia,RS,RB,Earth
+Reunion,RE,RE,Earth
+Marshall Islands,MH,RM,Earth
+Romania,RO,RO,Earth
+Philippines,PH,RP,Earth
+Puerto Rico,PR,RQ,Earth
+Russia,RU,RS,Earth
+Rwanda,RW,RW,Earth
+Saudi Arabia,SA,SA,Earth
+St. Pierre and Miquelon,PM,SB,Earth
+St. Kitts and Nevis,KN,SC,Earth
+Seychelles,SC,SE,Earth
+South Africa,ZA,SF,Earth
+Senegal,SN,SG,Earth
+St. Helena,SH,SH,Earth
+Slovenia,SI,SI,Earth
+Sierra Leone,SL,SL,Earth
+Singapore,SG,SN,Earth
+Somalia,SO,SO,Earth
+Spain,ES,SP,Earth
+South Sudan,SS,SS,Earth
+St. Lucia,LC,ST,Earth
+Sudan,SD,SU,Earth
+Svalbard and Jan Mayen Islands,SJ,SV,Earth
+Sweden,SE,SW,Earth
+South Georgia and South Sandwich Is.,GS,SX,Earth
+Syria,SY,SY,Earth
+Switzerland,CH,SZ,Earth
+Trinidad and Tobago,TT,TD,Earth
+Tromelin Island,XX,TE,Earth
+Thailand,TH,TH,Earth
+Tajikistan,TJ,TI,Earth
+Turks and Caicos Islands,TC,TK,Earth
+Tokelau,TK,TL,Earth
+Tonga,TO,TN,Earth
+Togo,TG,TO,Earth
+Sao Tome and Principe,ST,TP,Earth
+Tunisia,TN,TS,Earth
+Timor-Leste,TL,TT,Earth
+Turkey,TR,TU,Earth
+Tuvalu,TV,TV,Earth
+Taiwan,TW,TW,Earth
+Turkmenistan,TM,TX,Earth
+Tanzania,TZ,TZ,Earth
+Uganda,UG,UG,Earth
+United Kingdom,GB,UK,Earth
+Ukraine,UA,UP,Earth
+United States,US,US,Earth
+Burkina Faso,BF,UV,Earth
+Uruguay,UY,UY,Earth
+Uzbekistan,UZ,UZ,Earth
+St. Vincent and the Grenadines,VC,VC,Earth
+Venezuela,VE,VE,Earth
+British Virgin Islands,VG,VI,Earth
+Vietnam,VN,VM,Earth
+United States Virgin Islands,VI,VQ,Earth
+Namibia,NA,WA,Earth
+Palestine,PS,WE,Earth
+Wallis and Futuna Islands,WF,WF,Earth
+Western Sahara,EH,WI,Earth
+Wake Island,XX,WQ,Earth
+Samoa,WS,WS,Earth
+Eswatini,SZ,WZ,Earth
+Yemen,YE,YM,Earth
+Zambia,ZM,ZA,Earth
+Zimbabwe,ZW,ZI,Earth

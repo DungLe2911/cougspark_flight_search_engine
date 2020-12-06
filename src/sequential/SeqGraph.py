@@ -1,37 +1,52 @@
 import pandas as pd
 import networkx as nx
-import os
+import os, datetime
 
+"""
+Washinton State University 
+Cpts415: Big Data
+Dr.Jia YU
+
+Space Flight Search Engine
+Jongyun Kim 11701083
+"""
 
 class SeqGraph(object):
-    def __init__(self):
-        self._path = "./dataset/cleaned"
-        # airlines: drop alias and fill 'nan' callsign
-        self.airlines = pd.read_csv(os.path.join(self._path, 'airlinesClean.csv'))
-        self.airlines = self.airlines.drop(columns=['Alias', 'Callsign'])
-
-        self.airports = pd.read_csv(os.path.join(self._path, 'airportsClean.csv'))
-        self.planes = pd.read_csv(os.path.join(self._path, 'planesClean.csv'))
-        self.countries = pd.read_csv(os.path.join(self._path, 'countriesClean.csv'))
-        self.routes = pd.read_csv(os.path.join(self._path, 'routesClean.csv'))
-
+    """
+    A class used to implement flight search engine with sequential algorithm.
+    """
+    def __init__(self, directory):
+        """
+        A constructor that reads csv files and initialize graph
+        """
+        self._path = os.path.join("../../datasets", directory)
+        self.airlines = pd.read_csv(os.path.join(self._path, 'airlines.csv'))
+        self.airports = pd.read_csv(os.path.join(self._path, 'airports.csv'))
+        self.planes = pd.read_csv(os.path.join(self._path, 'planes.csv'))
+        self.countries = pd.read_csv(os.path.join(self._path, 'countries.csv'))
+        self.routes = pd.read_csv(os.path.join(self._path, 'routes.csv'))
         self._CreateGraph()
 
-
     def _CreateGraph(self):
+        """
+        A method to create graph from pandas dataframe
+        """
         self.nodes = []
         self.edges = []
         for i, r in self.airports.set_index('airport_id').iterrows():
             self.nodes.append((i,r.to_dict()))
         for i, r in self.routes.set_index(['src_id','dst_id']).iterrows():
             self.edges.append((i[0],i[1],r.to_dict()))
-        print('node ex: {}'.format(self.nodes[0]))
-        print('edge ex: {}'.format(self.edges[0]))
+        # print('node ex: {}'.format(self.nodes[0]))
+        # print('edge ex: {}'.format(self.edges[0]))
 
         self.graph = self._CreateAdjacencyListGraph()
 
 
     def _CreateAdjacencyListGraph(self):
+        """
+        A method to create adjacency list graph
+        """
         graph = dict()
         for nodes in self.nodes:
             graph[nodes[0]] = set()
@@ -41,21 +56,27 @@ class SeqGraph(object):
 
 
     def FindAirlineWithCodeShare(self):
+        """
+        A method to find a list of airlines operating with code share
+        """
         codeshare_airline_id_list = []
         for edge in self.edges:
-            if(edge[2]['Codeshare'] == 'Y'):
+            if(edge[2]['codeshare'] == 'Y'):
                 codeshare_airline_id_list.append(edge[2]['airline_id'])
 
         codeshare_airline_id_list = set(codeshare_airline_id_list)
 
         codeshare_airline_name_list = []
         for airline_id in codeshare_airline_id_list:
-            codeshare_airline_name_list.append(self.airlines.set_index('AirlineID').loc[airline_id]['Name'])
+            codeshare_airline_name_list.append(self.airlines.set_index('airline_id').loc[airline_id]['name'])
         
         return codeshare_airline_name_list
 
 
     def FindTripXToYLessThanZ(self, X, Y, Z):
+        """
+        A method to find a trip that connects X and Y with less than Z stops (constrained reachability).
+        """
         # G = nx.Graph()
         # G.add_nodes_from(self.nodes)
         # G.add_edges_from(self.edges)
@@ -95,6 +116,9 @@ class SeqGraph(object):
         return simple_path
 
     def FindDHopCities(self, X, d):
+        """
+        A method to find all the cities reachable within d hops of a city (bounded reachability). 
+        """
         # G = nx.Graph()
         # G.add_nodes_from(self.nodes)
         # G.add_edges_from(self.edges)
@@ -141,29 +165,59 @@ class SeqGraph(object):
         return cities_d_hop
 
     def GetAirportNameFromAirportId(self, airport_id):
-        return self.airports.set_index('airport_id').loc[airport_id]['airport_name']
+        """
+        A method to get airport name from airport id
+        """
+        return self.airports.set_index('airport_id').loc[airport_id]['name']
 
     def GetCityFromAirportId(self, airprot_id):
+        """
+        A method to get city from airport id
+        """
         return self.airports.set_index('airport_id').loc[airprot_id]['city']
 
 
 def main():
-    sg = SeqGraph()
+    print("Load files and initalize graphs")
+    start = datetime.datetime.now()
+    sg = SeqGraph('enriched')
+    end = datetime.datetime.now()
+    delta = end-start
+    elipsed = int(delta.total_seconds() * 1000)
+    print("elipsed(ms):",elipsed)
 
+
+    print("Find a list of airlines operating with code share")
+    start = datetime.datetime.now()
     codeshare_airlines = sg.FindAirlineWithCodeShare()
+    end = datetime.datetime.now()
+    delta = end-start
+    elipsed = int(delta.total_seconds() * 1000)
+    print("elipsed:",elipsed)
     print(codeshare_airlines)
 
+
+    print("Find a trip that connects X and Y with less than Z stops")
     # seatac to pohang airport less than 3 stops
+    start = datetime.datetime.now()
     trips = sg.FindTripXToYLessThanZ(3577,2380,3)
+    end = datetime.datetime.now()
+    delta = end-start
+    elipsed = int(delta.total_seconds() * 1000)
+    print("elipsed:",elipsed)
     for trip in trips:
         print(trip, ":", sg.GetAirportNameFromAirportId(trip[0]), end="")
         for i in range(1,len(trip)):
             print(" ->", sg.GetAirportNameFromAirportId(trip[i]), end="")
         print()
 
-    cities_from_d_hop = sg.FindDHopCities('Pohang',2)
-    print(cities_from_d_hop)
-
+    # start = datetime.datetime.now()
+    # cities_from_d_hop = sg.FindDHopCities('Seattle',2)
+    # end = datetime.datetime.now()
+    # delta = end-start
+    # elipsed = int(delta.total_seconds() * 1000)
+    # print("elipsed:",elipsed)
+    # print(cities_from_d_hop)
 
 if __name__ == '__main__':
     main()

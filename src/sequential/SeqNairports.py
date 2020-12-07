@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
-# Sequential Algorithm
 
+# Sequential Algorithm
 # Original query problem:  Which country (or) territory has the highest number of Airports
 # Modified the original problem
 # Listed the top k countries based on the highest number of Airports
@@ -15,7 +15,6 @@ from pandasql import sqldf
 pysqldf = lambda q: sqldf(q, globals())
 path = "../datasets/cleanedv2"
 #path = "../datasets/enriched"
-
 
 class highestNoAirports:
     

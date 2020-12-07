@@ -1,13 +1,13 @@
-import json, datetime
+import json, datetime, gmplot
 
 from flask import Flask, request, Response
 from pyspark.sql import SparkSession
 
-from ParGraph import *
+from ParGraphAgg import *
 
 app = Flask(__name__)
 
-pg = ParGraph('enriched')
+pg = ParGraphAgg('enriched')
 
 @app.route("/", methods=['GET'])
 def hello():
@@ -35,6 +35,24 @@ def FindTripXToYLessThanZ():
     delta = end-start
     elapsed = delta.total_seconds() * 1000
     return Response(json.dumps({'elapsed(ms)':int(elapsed),'result':res}), mimetype='application/json')
+
+
+@app.route("/drawgraph", methods=['GET'])
+def DrawGraph():
+    # declare the center of the map, and how much we want the map zoomed in
+    geo_lat = [47.449001,37.469101,35.987955]
+    geo_lon = [-122.308998,126.450996,129.420383]
+    geo_lat2 = [47.449001,35.987955]
+    geo_lon2 = [-122.308998,129.420383]
+    gmap = gmplot.GoogleMapPlotter(0, 180, 3)
+    # plot heatmap
+    gmap.plot(geo_lat,geo_lon, edge_width = 3.0)
+    gmap.plot(geo_lat2,geo_lon2, edge_width = 3.0)
+    #Your Google_API_Key
+    gmap.apikey = "AIzaSyBrJkwsZLNnwLCwM5Ae-38M_Ua9ngn4Xts"
+    # save it to html
+    gmap.draw(r"./result.html")
+    return send_from_directory(".", "result.html")
     
 
 if __name__ == "__main__":

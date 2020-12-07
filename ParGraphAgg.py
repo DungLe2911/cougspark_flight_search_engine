@@ -3,10 +3,10 @@ from pyspark.sql import SparkSession
 from pyspark import SparkFiles, SparkContext
 from graphframes import *
 
-class ParGraph(object):
+class ParGraphAgg(object):
     def __init__(self, directory):
         self.path = os.path.join("./datasets", directory)
-        self.spark = SparkSession.builder.appName("cpts415-bigdata").master('spark://28f8bc9eb629:7077').getOrCreate()
+        self.spark = SparkSession.builder.appName("space-flight-search").master('spark://28f8bc9eb629:7077').getOrCreate()
         self._AddFile()
         self._ReadFile()
         self._CreateGraph()
@@ -35,7 +35,21 @@ class ParGraph(object):
 
     #########################################################
     # Add more functions
-    # here
+    def FindDhopCities(self, X, d):
+        query = """
+                SELECT airport_id
+                FROM airports
+                WHERE city == "{}"
+                """.format(X)
+
+        cities = []
+        airports = self.spark.sql(query)
+        for airport in [row['airport_id'] for row in airports.collect()]:
+            res = self.g.bfs("id = {}".format(airport), "id != \"{}\"".format(airport), maxPathLength=d)
+            cities.extend([row['city'] for row in res.select("to.city").dropDuplicates().collect()])
+        
+        return cities
+    
     #########################################################
         
     def FindAirlineWithCodeShare(self):

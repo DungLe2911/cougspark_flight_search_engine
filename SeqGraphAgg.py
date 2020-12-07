@@ -2,16 +2,7 @@ import pandas as pd
 import networkx as nx
 import os, datetime
 
-"""
-Washinton State University 
-Cpts415: Big Data
-Dr.Jia YU
-
-Space Flight Search Engine
-Jongyun Kim 11701083
-"""
-
-class SeqGraph(object):
+class SeqGraphAgg(object):
     """
     A class used to implement flight search engine with sequential algorithm.
     """
@@ -19,7 +10,7 @@ class SeqGraph(object):
         """
         A constructor that reads csv files and initialize graph
         """
-        self._path = os.path.join("../../datasets", directory)
+        self._path = os.path.join("./datasets", directory)
         self.airlines = pd.read_csv(os.path.join(self._path, 'airlines.csv'))
         self.airports = pd.read_csv(os.path.join(self._path, 'airports.csv'))
         self.planes = pd.read_csv(os.path.join(self._path, 'planes.csv'))
@@ -53,6 +44,14 @@ class SeqGraph(object):
         for edges in self.edges:
             graph[edges[0]].add(edges[1])
         return graph
+
+    def FindAirportInCountry(self, X):
+        airline_in_country_list = []
+        for node in self.nodes:
+            if(node[1]['country'] == X):
+                airline_in_country_list.append(node[1]['name'])
+
+        return airline_in_country_list
 
 
     def FindAirlineWithCodeShare(self):
@@ -180,36 +179,38 @@ class SeqGraph(object):
 def main():
     print("Load files and initalize graphs")
     start = datetime.datetime.now()
-    sg = SeqGraph('enriched')
+    sg = SeqGraphAgg('cleanedv2')
     end = datetime.datetime.now()
     delta = end-start
     elipsed = int(delta.total_seconds() * 1000)
     print("elipsed(ms):",elipsed)
 
+    airports_in_country = sg.FindAirportInCountry("South Korea")
+    print(airports_in_country)
 
-    print("Find a list of airlines operating with code share")
-    start = datetime.datetime.now()
-    codeshare_airlines = sg.FindAirlineWithCodeShare()
-    end = datetime.datetime.now()
-    delta = end-start
-    elipsed = int(delta.total_seconds() * 1000)
-    print("elipsed:",elipsed)
-    print(codeshare_airlines)
+    # print("Find a list of airlines operating with code share")
+    # start = datetime.datetime.now()
+    # codeshare_airlines = sg.FindAirlineWithCodeShare()
+    # end = datetime.datetime.now()
+    # delta = end-start
+    # elipsed = int(delta.total_seconds() * 1000)
+    # print("elipsed:",elipsed)
+    # print(codeshare_airlines)
 
 
-    print("Find a trip that connects X and Y with less than Z stops")
-    # seatac to pohang airport less than 3 stops
-    start = datetime.datetime.now()
-    trips = sg.FindTripXToYLessThanZ(3577,2380,3)
-    end = datetime.datetime.now()
-    delta = end-start
-    elipsed = int(delta.total_seconds() * 1000)
-    print("elipsed:",elipsed)
-    for trip in trips:
-        print(trip, ":", sg.GetAirportNameFromAirportId(trip[0]), end="")
-        for i in range(1,len(trip)):
-            print(" ->", sg.GetAirportNameFromAirportId(trip[i]), end="")
-        print()
+    # print("Find a trip that connects X and Y with less than Z stops")
+    # # seatac to pohang airport less than 3 stops
+    # start = datetime.datetime.now()
+    # trips = sg.FindTripXToYLessThanZ(3577,2380,3)
+    # end = datetime.datetime.now()
+    # delta = end-start
+    # elipsed = int(delta.total_seconds() * 1000)
+    # print("elipsed:",elipsed)
+    # for trip in trips:
+    #     print(trip, ":", sg.GetAirportNameFromAirportId(trip[0]), end="")
+    #     for i in range(1,len(trip)):
+    #         print(" ->", sg.GetAirportNameFromAirportId(trip[i]), end="")
+    #     print()
 
     # start = datetime.datetime.now()
     # cities_from_d_hop = sg.FindDHopCities('Seattle',2)

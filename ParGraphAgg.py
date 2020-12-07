@@ -35,6 +35,18 @@ class ParGraphAgg(object):
 
     #########################################################
     # Add more functions
+    def FindAirportInCountry(self, X):
+        query = """
+                SELECT name
+                From airports
+                WHERE country = "{}"
+                """.format(X)
+        
+        airports_in_city_df = self.spark.sql(query)
+        airports_in_city_list = [row['name'] for row in airports_in_city_df.collect()]
+        return airports_in_city_list
+
+
     def FindDhopCities(self, X, d):
         query = """
                 SELECT airport_id
@@ -90,15 +102,22 @@ class ParGraphAgg(object):
         
         airport_name = self.spark.sql(query)
         return airport_name.collect()[0]['name']
-    
-# Main
-# pg = ParGraph('enriched')
-# airline_list = pg.FindAirlineWithCodeShare()
-# print(airline_list)
 
-# trips = pg.FindTripXToYLessThanZ(3577, 2380, 3)
-# for trip in trips:
-#     print(trip[0], pg.GetAirportNameFromId(trip[0]), end=" ")
-#     for i in range(1, len(trip)):
-#         print("->",trip[i], pg.GetAirportNameFromId(trip[i]), end=" ")
-#     print()
+def main():
+    pg = ParGraphAgg('cleanedv2')
+
+    airports_in_city = pg.FindAirportInCountry("Italy")
+    print(airports_in_city)
+    # airline_list = pg.FindAirlineWithCodeShare()
+    # print(airline_list)
+
+    # trips = pg.FindTripXToYLessThanZ(3577, 2380, 3)
+    # for trip in trips:
+    #     print(trip[0], pg.GetAirportNameFromId(trip[0]), end=" ")
+    #     for i in range(1, len(trip)):
+    #         print("->",trip[i], pg.GetAirportNameFromId(trip[i]), end=" ")
+    #     print()
+
+
+if __name__ == '__main__':
+    main()

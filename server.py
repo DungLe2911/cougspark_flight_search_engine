@@ -20,8 +20,21 @@ def hello():
 def FindAirportInCountrySeq():
     start = datetime.datetime.now()
     X = request.args.get('x','')
+    res = sg.FindAirportInCountry(X)
     end = datetime.datetime.now()
-    return "X is {}".format(X)
+    delta = end-start
+    elapsed = delta.total_seconds() * 1000
+    return Response(json.dumps({'elapsed(ms)':elapsed, "size": len(res), 'seq_result':res}), mimetype='application/json')
+
+@app.route("/findairportincountrypar", methods=['GET'])
+def FindAirportInCountryPar():
+    start = datetime.datetime.now()
+    X = request.args.get('x','')
+    res = pg.FindAirportInCountry(X)
+    end = datetime.datetime.now()
+    delta = end-start
+    elapsed = delta.total_seconds() * 1000
+    return Response(json.dumps({'elapsed(ms)':elapsed, "size": len(res), 'par_result':res}), mimetype='application/json')
 
 @app.route("/findairlinewithcodeshare", methods=['GET'])
 def FindAirlineWithCodeShare():

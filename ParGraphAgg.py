@@ -45,7 +45,18 @@ class ParGraphAgg(object):
         airports_in_city_df = self.spark.sql(query)
         airports_in_city_list = [row['name'] for row in airports_in_city_df.collect()]
         return airports_in_city_list
+    
+    def FindAirlineHavingXStop(self, X):
+        query = """ 
+                SELECT DISTINCT airline_name 
+                FROM routes
+                WHERE stops = '{}'
+                ORDER BY airline_name ASC
+                """.format(X)
 
+        airline_having_xstop_df = self.spark.sql(query)
+        airline_having_xstop_list = [(row['airline_name']) for row in airline_having_xstop_df.collect()]
+        return airline_having_xstop_list
 
     def FindDhopCities(self, X, d):
         query = """
@@ -108,6 +119,9 @@ def main():
 
     airports_in_city = pg.FindAirportInCountry("Italy")
     print(airports_in_city)
+
+    airlines_having_xstop = pg.FindAirlineHavingXStop("1")
+    print(airlines_having_xstop)
     # airline_list = pg.FindAirlineWithCodeShare()
     # print(airline_list)
 

@@ -1,11 +1,14 @@
 import pandas as pd
 import networkx as nx
-import os, datetime
+import os
+import datetime
+
 
 class SeqGraphAgg(object):
     """
     A class used to implement flight search engine with sequential algorithm.
     """
+
     def __init__(self, directory):
         """
         A constructor that reads csv files and initialize graph
@@ -25,14 +28,13 @@ class SeqGraphAgg(object):
         self.nodes = []
         self.edges = []
         for i, r in self.airports.set_index('airport_id').iterrows():
-            self.nodes.append((i,r.to_dict()))
-        for i, r in self.routes.set_index(['src_id','dst_id']).iterrows():
-            self.edges.append((i[0],i[1],r.to_dict()))
+            self.nodes.append((i, r.to_dict()))
+        for i, r in self.routes.set_index(['src_id', 'dst_id']).iterrows():
+            self.edges.append((i[0], i[1], r.to_dict()))
         # print('node ex: {}'.format(self.nodes[0]))
         # print('edge ex: {}'.format(self.edges[0]))
 
         self.graph = self._CreateAdjacencyListGraph()
-
 
     def _CreateAdjacencyListGraph(self):
         """
@@ -46,13 +48,22 @@ class SeqGraphAgg(object):
         return graph
 
     def FindAirportInCountry(self, X):
-        airline_in_country_list = []
+        airport_in_country_list = []
         for node in self.nodes:
             if(node[1]['country'] == X):
-                airline_in_country_list.append(node[1]['name'])
+                airport_in_country_list.append(node[1]['name'])
 
-        return airline_in_country_list
+        return airport_in_country_list
 
+    def FindAirlineHavingXStop(self, X):
+        airline_having_xstop_list = []
+        for edge in self.edges:
+            if(edge[2]['stops'] == int(X)):
+                airline_having_xstop_list.append(edge[2]['airline_name'])
+
+        airline_having_xstop_list = list(set(airline_having_xstop_list))
+        airline_having_xstop_list.sort()
+        return airline_having_xstop_list
 
     def FindAirlineWithCodeShare(self):
         """
@@ -67,10 +78,10 @@ class SeqGraphAgg(object):
 
         codeshare_airline_name_list = []
         for airline_id in codeshare_airline_id_list:
-            codeshare_airline_name_list.append(self.airlines.set_index('airline_id').loc[airline_id]['name'])
-        
-        return codeshare_airline_name_list
+            codeshare_airline_name_list.append(
+                self.airlines.set_index('airline_id').loc[airline_id]['name'])
 
+        return codeshare_airline_name_list
 
     def FindTripXToYLessThanZ(self, X, Y, Z):
         """
@@ -92,7 +103,7 @@ class SeqGraphAgg(object):
         current_path = []
         simple_path = []
 
-        def DFS(u,v,d):
+        def DFS(u, v, d):
             if (visited[u]):
                 return
             visited[u] = True
@@ -134,14 +145,15 @@ class SeqGraphAgg(object):
 
         graph_adj = self.graph
 
-        airports_id_in_city = self.airports.loc[self.airports['city'] == X, 'airport_id'].to_list()
+        airports_id_in_city = self.airports.loc[self.airports['city'] == X, 'airport_id'].to_list(
+        )
         cities_d_hop = set()
         for airport in airports_id_in_city:
             airports_d_hop = set()
             current_distance = 0
             queue = {airport}
             visited = {airport}
-            
+
             # BFS
             while queue:
                 if current_distance == d:
@@ -157,7 +169,7 @@ class SeqGraphAgg(object):
                             current_path.add(child)
 
                 queue = current_path
-            
+
             for airport_d_hop in airports_d_hop:
                 cities_d_hop.add(self.GetCityFromAirportId(airport_d_hop))
 
@@ -183,10 +195,13 @@ def main():
     end = datetime.datetime.now()
     delta = end-start
     elipsed = int(delta.total_seconds() * 1000)
-    print("elipsed(ms):",elipsed)
+    print("elipsed(ms):", elipsed)
 
     airports_in_country = sg.FindAirportInCountry("South Korea")
     print(airports_in_country)
+
+    airlines_having_xstop = sg.FindAirlineHavingXStop(1)
+    print(airlines_having_xstop)
 
     # print("Find a list of airlines operating with code share")
     # start = datetime.datetime.now()
@@ -196,7 +211,6 @@ def main():
     # elipsed = int(delta.total_seconds() * 1000)
     # print("elipsed:",elipsed)
     # print(codeshare_airlines)
-
 
     # print("Find a trip that connects X and Y with less than Z stops")
     # # seatac to pohang airport less than 3 stops
@@ -219,6 +233,7 @@ def main():
     # elipsed = int(delta.total_seconds() * 1000)
     # print("elipsed:",elipsed)
     # print(cities_from_d_hop)
+
 
 if __name__ == '__main__':
     main()

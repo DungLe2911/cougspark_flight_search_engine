@@ -9,8 +9,8 @@ from SeqGraphAgg import *
 
 app = Flask(__name__)
 
-sg = SeqGraphAgg('cleanedv2')
-pg = ParGraphAgg('cleanedv2')
+sga = SeqGraphAgg('cleanedv2')
+pga = ParGraphAgg('cleanedv2')
 
 @app.route("/", methods=['GET'])
 def hello():
@@ -20,7 +20,7 @@ def hello():
 def FindAirportInCountrySeq():
     start = datetime.datetime.now()
     X = request.args.get('x','')
-    res = sg.FindAirportInCountry(X)
+    res = sga.FindAirportInCountry(X)
     end = datetime.datetime.now()
     delta = end-start
     elapsed = delta.total_seconds() * 1000
@@ -30,7 +30,27 @@ def FindAirportInCountrySeq():
 def FindAirportInCountryPar():
     start = datetime.datetime.now()
     X = request.args.get('x','')
-    res = pg.FindAirportInCountry(X)
+    res = pga.FindAirportInCountry(X)
+    end = datetime.datetime.now()
+    delta = end-start
+    elapsed = delta.total_seconds() * 1000
+    return Response(json.dumps({'elapsed(ms)':elapsed, "size": len(res), 'par_result':res}), mimetype='application/json')
+
+@app.route("/findairlinehavingxstopseq", methods=['GET'])
+def FindAirlineHavingXStopSeq():
+    start = datetime.datetime.now()
+    X = request.args.get('x','')
+    res = sga.FindAirlineHavingXStop(X)
+    end = datetime.datetime.now()
+    delta = end-start
+    elapsed = delta.total_seconds() * 1000
+    return Response(json.dumps({'elapsed(ms)':elapsed, "size": len(res), 'seq_result':res}), mimetype='application/json')
+
+@app.route("/findairlinehavingxstoppar", methods=['GET'])
+def FindAirlineHavingXStopPar():
+    start = datetime.datetime.now()
+    X = request.args.get('x','')
+    res = pga.FindAirlineHavingXStop(X)
     end = datetime.datetime.now()
     delta = end-start
     elapsed = delta.total_seconds() * 1000
@@ -38,7 +58,7 @@ def FindAirportInCountryPar():
 
 @app.route("/findairlinewithcodeshare", methods=['GET'])
 def FindAirlineWithCodeShare():
-    res = pg.FindAirlineWithCodeShare()
+    res = pga.FindAirlineWithCodeShare()
     return Response(json.dumps({'result':res}), mimetype='application/json')
 
 @app.route("/findtripxtoylessthanz", methods=['GET'])
@@ -47,12 +67,12 @@ def FindTripXToYLessThanZ():
     X = request.args.get('x','')
     Y = request.args.get('y','')
     Z = request.args.get('z','')
-    trips = pg.FindTripXToYLessThanZ(X, Y, int(Z))
+    trips = pga.FindTripXToYLessThanZ(X, Y, int(Z))
     res = []
     for trip in trips:
         trip_list = {}
         for apid in trip:
-            trip_list[apid]=pg.GetAirportNameFromId(apid)
+            trip_list[apid]=pga.GetAirportNameFromId(apid)
         res.append(trip_list)
     end = datetime.datetime.now()
     delta = end-start

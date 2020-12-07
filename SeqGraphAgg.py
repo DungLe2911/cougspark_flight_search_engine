@@ -69,19 +69,14 @@ class SeqGraphAgg(object):
         """
         A method to find a list of airlines operating with code share
         """
-        codeshare_airline_id_list = []
+        airline_with_codeshare_list = []
         for edge in self.edges:
             if(edge[2]['codeshare'] == 'Y'):
-                codeshare_airline_id_list.append(edge[2]['airline_id'])
+                airline_with_codeshare_list.append(edge[2]['airline_name'])
 
-        codeshare_airline_id_list = set(codeshare_airline_id_list)
-
-        codeshare_airline_name_list = []
-        for airline_id in codeshare_airline_id_list:
-            codeshare_airline_name_list.append(
-                self.airlines.set_index('airline_id').loc[airline_id]['name'])
-
-        return codeshare_airline_name_list
+        airline_with_codeshare_list = list(set(airline_with_codeshare_list))
+        airline_with_codeshare_list.sort()
+        return airline_with_codeshare_list
 
     def FindTripXToYLessThanZ(self, X, Y, Z):
         """
@@ -197,20 +192,14 @@ def main():
     elipsed = int(delta.total_seconds() * 1000)
     print("elipsed(ms):", elipsed)
 
-    airports_in_country = sg.FindAirportInCountry("South Korea")
-    print(airports_in_country)
+    # airports_in_country = sg.FindAirportInCountry("South Korea")
+    # print(airports_in_country)
 
-    airlines_having_xstop = sg.FindAirlineHavingXStop(1)
-    print(airlines_having_xstop)
+    # airlines_having_xstop = sg.FindAirlineHavingXStop(1)
+    # print(airlines_having_xstop)
 
-    # print("Find a list of airlines operating with code share")
-    # start = datetime.datetime.now()
-    # codeshare_airlines = sg.FindAirlineWithCodeShare()
-    # end = datetime.datetime.now()
-    # delta = end-start
-    # elipsed = int(delta.total_seconds() * 1000)
-    # print("elipsed:",elipsed)
-    # print(codeshare_airlines)
+    airlines_with_codeshare = sg.FindAirlineWithCodeShare()
+    print(airlines_with_codeshare)
 
     # print("Find a trip that connects X and Y with less than Z stops")
     # # seatac to pohang airport less than 3 stops

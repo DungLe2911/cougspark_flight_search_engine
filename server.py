@@ -56,10 +56,23 @@ def FindAirlineHavingXStopPar():
     elapsed = delta.total_seconds() * 1000
     return Response(json.dumps({'elapsed(ms)':elapsed, "size": len(res), 'par_result':res}), mimetype='application/json')
 
-@app.route("/findairlinewithcodeshare", methods=['GET'])
-def FindAirlineWithCodeShare():
+@app.route("/findairlinewithcodeshareseq", methods=['GET'])
+def FindAirlineWithCodeShareSeq():
+    start = datetime.datetime.now()
+    res = sga.FindAirlineWithCodeShare()
+    end = datetime.datetime.now()
+    delta = end-start
+    elapsed = delta.total_seconds() * 1000
+    return Response(json.dumps({'elapsed(ms)':elapsed, "size": len(res), 'seq_result':res}), mimetype='application/json')
+
+@app.route("/findairlinewithcodesharepar", methods=['GET'])
+def FindAirlineWithCodeSharePar():
+    start = datetime.datetime.now()
     res = pga.FindAirlineWithCodeShare()
-    return Response(json.dumps({'result':res}), mimetype='application/json')
+    end = datetime.datetime.now()
+    delta = end-start
+    elapsed = delta.total_seconds() * 1000
+    return Response(json.dumps({'elapsed(ms)':elapsed, "size": len(res), 'par_result':res}), mimetype='application/json')
 
 @app.route("/findtripxtoylessthanz", methods=['GET'])
 def FindTripXToYLessThanZ():

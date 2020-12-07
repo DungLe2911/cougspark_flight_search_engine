@@ -74,6 +74,25 @@ def FindAirlineWithCodeSharePar():
     elapsed = delta.total_seconds() * 1000
     return Response(json.dumps({'elapsed(ms)':elapsed, "size": len(res), 'par_result':res}), mimetype='application/json')
 
+@app.route("/findcountryhashighestairprotseq", methods=['GET'])
+def FindCountryHasHighestAirportSeq():
+    start = datetime.datetime.now()
+    res = sga.FindCountryHasHighestAirport()
+    end = datetime.datetime.now()
+    delta = end-start
+    elapsed = delta.total_seconds() * 1000
+    print(res)
+    return Response(json.dumps({'elapsed(ms)':elapsed, "size": len(res), 'seq_result':res}), mimetype='application/json')
+
+@app.route("/findcountryhashighestairprotpar", methods=['GET'])
+def FindCountryHasHighestAirportPar():
+    start = datetime.datetime.now()
+    res = pga.FindCountryHasHighestAirport()
+    end = datetime.datetime.now()
+    delta = end-start
+    elapsed = delta.total_seconds() * 1000
+    return Response(json.dumps({'elapsed(ms)':elapsed, "size": len(res), 'par_result':res}), mimetype='application/json')
+
 @app.route("/findtripxtoylessthanz", methods=['GET'])
 def FindTripXToYLessThanZ():
     start = datetime.datetime.now()

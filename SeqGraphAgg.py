@@ -78,6 +78,19 @@ class SeqGraphAgg(object):
         airline_with_codeshare_list.sort()
         return airline_with_codeshare_list
 
+    def FindCountryHasHighestAirport(self):
+        country_with_airports_dict = {}
+        for node in self.nodes:
+            country = node[1]['country']
+            if country in country_with_airports_dict.keys():
+                country_with_airports_dict[country] = country_with_airports_dict.get(country) + 1
+            else:
+                country_with_airports_dict[country] = 1
+        
+        country_with_airports_list = list(country_with_airports_dict.items())
+        country_with_airports_list.sort(key=lambda x: x[1], reverse=True)
+        return country_with_airports_list[:10]
+
     def FindTripXToYLessThanZ(self, X, Y, Z):
         """
         A method to find a trip that connects X and Y with less than Z stops (constrained reachability).
@@ -198,8 +211,11 @@ def main():
     # airlines_having_xstop = sg.FindAirlineHavingXStop(1)
     # print(airlines_having_xstop)
 
-    airlines_with_codeshare = sg.FindAirlineWithCodeShare()
-    print(airlines_with_codeshare)
+    # airlines_with_codeshare = sg.FindAirlineWithCodeShare()
+    # print(airlines_with_codeshare)
+
+    country_with_airports = sg.FindCountryHasHighestAirport()
+    print(country_with_airports)
 
     # print("Find a trip that connects X and Y with less than Z stops")
     # # seatac to pohang airport less than 3 stops

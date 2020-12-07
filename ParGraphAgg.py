@@ -28,8 +28,11 @@ class ParGraphAgg(object):
             header=True, inferSchema=True, delimiter=',').csv(SparkFiles.get("airports.csv"))
         self.routes = self.spark.read.options(
             header=True, inferSchema=True, delimiter=',').csv(SparkFiles.get("routes.csv"))
+        self.countries = self.spark.read.options(
+            header=True, inferSchema=True, delimiter=',').csv(SparkFiles.get("countries.csv"))
         self.airports.createOrReplaceTempView("airports")
         self.routes.createOrReplaceTempView("routes")
+        self.countries.createOrReplaceTempView("countries")
 
     def _CreateGraph(self):
         g_airports = self.airports.withColumnRenamed('airport_id', 'id')
@@ -74,8 +77,23 @@ class ParGraphAgg(object):
                 """
 
         airline_with_codeshare_df = self.spark.sql(query)
-        airline_with_codeshare_list = [(row['airline_name']) for row in airline_with_codeshare_df.collect()]
+        airline_with_codeshare_list = [
+            (row['airline_name']) for row in airline_with_codeshare_df.collect()]
         return airline_with_codeshare_list
+
+    def FindCountryHasHighestAirport(self):
+        query = """
+                SELECT country, count('airport_id') as airport_count 
+                FROM airports 
+                LEFT JOIN countries ON airports.country = countries.name   
+                GROUP BY country
+                ORDER BY airport_count DESC
+                """
+        country_with_airports_df = self.spark.sql(query)
+        country_with_airports_list = [(row['country'], row['airport_count']) for row in country_with_airports_df.select(
+            'country', 'airport_count').collect()[:10]]
+        
+        return country_with_airports_list
 
     def FindTripXToYLessThanZ(self, X, Y, Z):
         assert (Z < 4 or Z > 0), "Z should be less than equal 3"
@@ -136,8 +154,11 @@ def main():
     # airlines_having_xstop = pg.FindAirlineHavingXStop("1")
     # print(airlines_having_xstop)
 
-    airlines_with_codeshare = pg.FindAirlineWithCodeShare()
-    print(airlines_with_codeshare)
+    # airlines_with_codeshare = pg.FindAirlineWithCodeShare()
+    # print(airlines_with_codeshare)
+
+    country_with_airports = pg.FindCountryHasHighestAirport()
+    print(country_with_airports)
 
     # trips = pg.FindTripXToYLessThanZ(3577, 2380, 3)
     # for trip in trips:

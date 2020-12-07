@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Space Flight Search Engine - CougSpark</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+    <header class="content" style="background-image: url({{ url_for('static', filename='enriched_diagram_3d_2.png') }});background-repeat: no-repeat; background-position: right;">
+        <h1>Space Flight Search Engine</h1>
+        <h2>Washington State University</h2>
+        <h3>Cpts415 Big Data</h3>
+        <h3>Dr. Jia Yu</h3>
+        <ul style="list-style:none; padding-left:0px; color:slategray;">
+            <li style="font-weight: bold;">Team: CougSpark</li>
+            <li>11698858 Pinak Bhalerao</li>
+            <li>11538364 Nicolette Dixon</li>
+            <li>11640670 Richard Le</li>
+            <li>11641194 Nur Afsa Syeda</li>
+            <li>11684949 Yize Hu</li>
+            <li>11701083 Jongyun Kim</li>
+        </ul>
+        <br>
+        <br>
+        <br>
+    </header>
+    <div class="content">
+        <b>Project Questionnaire</b>
+        <ul style="list-style:none;">
+            <li><b>Find list of airports operating in the Country X</b>
+                <form method="get" class="form-inline" action="/findairportincountryseq">
+                    <div class="form-group">
+                        <label for="q1">Country X</label>
+                        <input name="x" id="x" required>
+                        <button type="submit">Seq</button>
+                    </div>
+                </form>
+                <form method="get" class="form-inline" action="/findairportincountrypar">
+                    <div class="form-group">
+                        <label for="q1">Country X</label>
+                        <input name="X" id="x" required>
+                        <button type="submit">Par</button>
+                    </div>
+                </form>
+            </li>
+            <li><b>Find list of airlines having X stops</b>
+                <form method="get" class="form-inline" action="/findairportincountryseq">
+                    <div class="form-group">
+                        <label for="q2">Stop X</label>
+                        <input name="x" id="x" required>
+                        <button type="submit">Seq</button>
+                    </div>
+                </form>
+                <form method="get" class="form-inline" action="/findairportincountrypar">
+                    <div class="form-group">
+                        <label for="q2">Stop X</label>
+                        <input name="X" id="x" required>
+                        <button type="submit">Par</button>
+                    </div>
+                </form>
+            </li>
+            <li><b>Find list of airlines operating with code share</b>
+                <form method="get" class="form-inline" action="/findairlinewithcodeshare">
+                    <div class="form-group">
+                        <label for="q3">Airlines with code share</label>
+                        <button type="submit">Seq</button>
+                    </div>
+                </form>
+                <form method="get" class="form-inline" action="/findairlinewithcodeshare">
+                    <div class="form-group">
+                        <label for="q3">Airlines with code share</label>
+                        <button type="submit">Par</button>
+                    </div>
+                </form>
+            </li>
+            <li><b>Find Which country (or) territory has the highest number of Airports.</b>
+                <form method="get" class="form-inline" action="/findairportincountryseq">
+                    <div class="form-group">
+                        <label for="q4">Country has the highest number of airports</label>
+                        <button type="submit">Seq</button>
+                    </div>
+                </form>
+                <form method="get" class="form-inline" action="/findairportincountrypar">
+                    <div class="form-group">
+                        <label for="q4">Country has the highest number of airports</label>
+                        <button type="submit">Par</button>
+                    </div>
+                </form>
+            </li>
+            <li><b>Find top K cities with most incoming/outgoing airlines</b>
+                <form method="get" class="form-inline" action="/findairportincountryseq">
+                    <div class="form-group">
+                        <label for="q5">Top X</label>
+                        <input name="x" id="x" required>
+                        <button type="submit">Seq</button>
+                    </div>
+                </form>
+                <form method="get" class="form-inline" action="/findairportincountrypar">
+                    <div class="form-group">
+                        <label for="q5">Top X</label>
+                        <input name="X" id="x" required>
+                        <button type="submit">Par</button>
+                    </div>
+                </form>
+            </li>
+            <li><b>Find a trip that connects two cities X and Y (reachability)</b>
+                <form method="get" class="form-inline" action="/findairportincountryseq">
+                    <div class="form-group">
+                        <label for="q6x">City X</label>
+                        <input name="x" id="x" required>
+                        <label for="q6y">City Y</label>
+                        <input name="y" id="y" required>
+                        <button type="submit">Seq</button>
+                    </div>
+                </form>
+                <form method="get" class="form-inline" action="/findairportincountrypar">
+                    <div class="form-group">
+                        <label for="q6x">City X</label>
+                        <input name="x" id="x" required>
+                        <label for="q6y">City Y</label>
+                        <input name="y" id="y" required>
+                        <button type="submit">Par</button>
+                    </div>
+                </form>
+            </li>
+            <li><b>Find a trip that connects X and Y with less than Z stops (constrained reachability)</b>
+                <form method="get" class="form-inline" action="/findairportincountryseq">
+                    <div class="form-group">
+                        <label for="q7x">Airport X</label>
+                        <input name="x" id="x" required>
+                        <label for="q7y">Airport Y</label>
+                        <input name="y" id="y" required>
+                        <label for="q7z">Stop Z</label>
+                        <input name="z" id="z" required>
+                        <button type="submit">Seq</button>
+                    </div>
+                </form>
+                <form method="get" class="form-inline" action="/findairportincountrypar">
+                    <div class="form-group">
+                        <label for="q7x">Airport X</label>
+                        <input name="x" id="x" required>
+                        <label for="q7y">Airport Y</label>
+                        <input name="y" id="y" required>
+                        <label for="q7z">Stop Z</label>
+                        <input name="z" id="z" required>
+                        <button type="submit">Par</button>
+                    </div>
+                </form>
+            </li>
+            <li><b>Find all the cities reachable within d hops of a city (bounded reachability)</b>
+                <form method="get" class="form-inline" action="/findairportincountryseq">
+                    <div class="form-group">
+                        <label for="q8d">Hop D</label>
+                        <input name="d" id="d" required>
+                        <label for="q8x">City X</label>
+                        <input name="x" id="x" required>
+                        <button type="submit">Seq</button>
+                    </div>
+                </form>
+                <form method="get" class="form-inline" action="/findairportincountrypar">
+                    <div class="form-group">
+                        <label for="q8d">Hop D</label>
+                        <input name="d" id="d" required>
+                        <label for="q8x">City X</label>
+                        <input name="x" id="x" required>
+                        <button type="submit">Par</button>
+                    </div>
+                </form>
+            </li>
+            <li><b>Fast Transitive closure/connected component implemented in parallel/distributed algorithms</b>
+                <form method="get" class="form-inline" action="/findairportincountrypar">
+                    <div class="form-group">
+                        <label for="q9">Transitive closure/connected component</label>
+                        <button type="submit">Par</button>
+                    </div>
+                </form>
+            </li>
+        </ul>
+    </div>
+    <div class="flash">
+        CougSpark Trip Advisor (Toy Application)
+        <form method="get" class="form-inline" action="/findairportincountrypar">
+            <div class="form-group">
+                <label for="toyx">From</label>
+                <input name="x" id="x" value="pullman" required>
+                <label for="toyy">to</label>
+                <input name="x" id="y" required>
+                <button type="submit">search</button>
+            </div>
+        </form>
+    </div>
+</body>
+
+</html>

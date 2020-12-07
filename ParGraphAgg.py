@@ -6,7 +6,7 @@ from graphframes import *
 class ParGraphAgg(object):
     def __init__(self, directory):
         self.path = os.path.join("./datasets", directory)
-        self.spark = SparkSession.builder.appName("space-flight-search").master('spark://28f8bc9eb629:7077').getOrCreate()
+        self.spark = SparkSession.builder.appName("space-flight-search").master('spark://d7a5fdf2eacc:7077').getOrCreate()
         self._AddFile()
         self._ReadFile()
         self._CreateGraph()

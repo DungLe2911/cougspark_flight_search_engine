@@ -1,17 +1,27 @@
 import json, datetime, gmplot
 
-from flask import Flask, request, Response
+from flask import Flask, render_template
+from flask import request, Response, send_from_directory
 from pyspark.sql import SparkSession
 
 from ParGraphAgg import *
+from SeqGraphAgg import *
 
 app = Flask(__name__)
 
-pg = ParGraphAgg('enriched')
+sg = SeqGraphAgg('cleanedv2')
+pg = ParGraphAgg('cleanedv2')
 
 @app.route("/", methods=['GET'])
 def hello():
-    return "Welcome to Space Flight Search Engine!"
+    return render_template('index.html')
+
+@app.route("/findairportincountryseq", methods=['GET'])
+def FindAirportInCountrySeq():
+    start = datetime.datetime.now()
+    X = request.args.get('x','')
+    end = datetime.datetime.now()
+    return "X is {}".format(X)
 
 @app.route("/findairlinewithcodeshare", methods=['GET'])
 def FindAirlineWithCodeShare():

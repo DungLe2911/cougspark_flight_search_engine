@@ -229,7 +229,7 @@ class SeqGraphAgg(object):
         else:
             return []
 
-    def FindDHopCities(self, X, d):
+    def FindDHopCities(self, d, X):
         """
         A method to find all the cities reachable within d hops of a city (bounded reachability). 
         """
@@ -246,6 +246,7 @@ class SeqGraphAgg(object):
         #         cities_h_hop.add(self.GetCityFromAirportId(airport_h_hop))
 
         # return cities_h_hop
+        d = int(d)
 
         graph_adj = self.graph
 
@@ -260,7 +261,7 @@ class SeqGraphAgg(object):
 
             # BFS
             while queue:
-                if current_distance == d:
+                if current_distance <= d and current_distance > 0:
                     airports_d_hop.update(queue)
 
                 current_distance += 1
@@ -277,7 +278,9 @@ class SeqGraphAgg(object):
             for airport_d_hop in airports_d_hop:
                 cities_d_hop.add(self.GetCityFromAirportId(airport_d_hop))
 
-        return cities_d_hop
+        cities_d_hop_list = list(cities_d_hop)
+        cities_d_hop_list.sort()
+        return cities_d_hop_list
 
     def GetAirportNameFromAirportId(self, airport_id):
         """
@@ -319,7 +322,7 @@ def main():
     # print(topk_busy_incoming_city)
     # print(topk_busy_outgoing_city)
 
-    print(sg.FindTripXCityToYCity("Seattle", "Pohang"))
+    # print(sg.FindTripXCityToYCity("Seattle", "Pohang"))
 
     # print("Find a trip that connects X and Y with less than Z stops")
     # # seatac to pohang airport less than 3 stops
@@ -336,7 +339,7 @@ def main():
     #     print()
 
     # start = datetime.datetime.now()
-    # cities_from_d_hop = sg.FindDHopCities('Seattle',2)
+    print(sg.FindDHopCities(1, 'Seattle'))
     # end = datetime.datetime.now()
     # delta = end-start
     # elipsed = int(delta.total_seconds() * 1000)

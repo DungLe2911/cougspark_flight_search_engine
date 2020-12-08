@@ -158,7 +158,7 @@ class ParGraphAgg(object):
 
     def FindTripXToYLessThanZ(self, X, Y, Z):
         Z = int(Z)
-        assert (Z < 4 or Z > 0), "Z should be less than equal 3"
+        assert (Z < 4 and Z > 0), "Z should be less than equal 3"
 
         if(Z == 1):
             paths = "(x)-[e]->(y)"
@@ -184,6 +184,39 @@ class ParGraphAgg(object):
         else:
             return []
 
+    def FindDHopCities(self, d, X):
+        d  = int(d)
+        assert(d < 4 and d > 0), "d should be less than equal 3"
+        query = """
+                SELECT airport_id
+                FROM airports
+                WHERE city == "{}"
+                """.format(X)
+
+        airports_in_xcity = [row['airport_id'] for row in self.spark.sql(query).collect()]
+        cities = []
+        if (d > 0):
+            paths = "(x)-[e]->(y)"
+            for airport in airports_in_xcity:
+                trips = self.g.find(paths).filter("x.id == "+str(airport)).filter("y.id !="+str(airport))
+                cities.extend([row['city'] for row in trips.select("y.city", "y.country").dropDuplicates().collect()])
+                
+        if (d > 1):
+            paths = "(x)-[e]->(b); (b)-[e2]->(y)"
+            for airport in airports_in_xcity:
+                trips = self.g.find(paths).filter("x.id == "+str(airport)).filter("y.id !="+str(airport))
+                cities.extend([row['city'] for row in trips.select("y.city", "y.country").dropDuplicates().collect()])
+                
+        if (d > 2):
+            paths = "(x)-[e]->(b); (b)-[e2]->(c) ; (c)-[e3]->(y)"
+            for airport in airports_in_xcity:
+                trips = self.g.find(paths).filter("x.id == "+str(airport)).filter("y.id !="+str(airport))
+                cities.extend([row['city'] for row in trips.select("y.city", "y.country").dropDuplicates().collect()])
+                
+        cities = list(set(cities))
+        cities.sort()
+        return cities
+
     def GetAirportNameFromAirportId(self, airport_id):
         query = """
                 SELECT DISTINCT name
@@ -193,24 +226,6 @@ class ParGraphAgg(object):
 
         airport_name = self.spark.sql(query)
         return airport_name.collect()[0]['name']
-
-    def FindDhopCities(self, X, d):
-        query = """
-                SELECT airport_id
-                FROM airports
-                WHERE city == "{}"
-                """.format(X)
-
-        cities = []
-        airports = self.spark.sql(query)
-        for airport in [row['airport_id'] for row in airports.collect()]:
-            res = self.g.bfs("id = {}".format(airport),
-                             "id != \"{}\"".format(airport), maxPathLength=d)
-            cities.extend([row['city'] for row in res.select(
-                "to.city").dropDuplicates().collect()])
-
-        return cities
-
 
 def main():
     pg = ParGraphAgg('cleanedv2')
@@ -233,15 +248,12 @@ def main():
     # print(topk_busy_incoming_city)
     # print(topk_busy_outgoing_city)
 
-    print(pg.FindTripXCityToYCity("Seattle", "Hamhung"))
-
+    # print(pg.FindTripXCityToYCity("Seattle", "Hamhung"))
     # trips = pg.FindTripXToYLessThanZ(3577, 2380, 3)
-    # for trip in trips:
-    #     print(trip[0], pg.GetAirportNameFromId(trip[0]), end=" ")
-    #     for i in range(1, len(trip)):
-    #         print("->",trip[i], pg.GetAirportNameFromId(trip[i]), end=" ")
-    #     print()
 
+    print(pg.FindDHopCities(1, 'Seattle'))
+
+    
 
 if __name__ == '__main__':
     main()

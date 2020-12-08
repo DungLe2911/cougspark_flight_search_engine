@@ -140,23 +140,35 @@ def FindTripXCityToYCityPar():
     elapsed = delta.total_seconds() * 1000
     return Response(json.dumps({'elapsed(ms)':int(elapsed),'result':res}), mimetype='application/json')
 
-@app.route("/findtripxtoylessthanz", methods=['GET'])
-def FindTripXToYLessThanZ():
+@app.route("/findtripxtoylessthanzseq", methods=['GET'])
+def FindTripXToYLessThanZSeq():
     start = datetime.datetime.now()
     X = request.args.get('x','')
     Y = request.args.get('y','')
     Z = request.args.get('z','')
-    trips = pga.FindTripXToYLessThanZ(X, Y, int(Z))
-    res = []
-    for trip in trips:
-        trip_list = {}
-        for apid in trip:
-            trip_list[apid]=pga.GetAirportNameFromAirportId(apid)
-        res.append(trip_list)
+    res = sga.FindTripXToYLessThanZ(X, Y, Z)
     end = datetime.datetime.now()
     delta = end-start
     elapsed = delta.total_seconds() * 1000
     return Response(json.dumps({'elapsed(ms)':int(elapsed),'result':res}), mimetype='application/json')
+
+@app.route("/findtripxtoylessthanzpar", methods=['GET'])
+def FindTripXToYLessThanZPar():
+    start = datetime.datetime.now()
+    X = request.args.get('x','')
+    Y = request.args.get('y','')
+    Z = request.args.get('z','')
+    assert(int(Z)<4 or int(Z) > 0)
+    result = []
+    for i in range(1, int(Z)+1):
+        res = pga.FindTripXToYLessThanZ(X, Y, i)
+        if(len(res) > 0):
+            result.append(res)
+            break
+    end = datetime.datetime.now()
+    delta = end-start
+    elapsed = delta.total_seconds() * 1000
+    return Response(json.dumps({'elapsed(ms)':int(elapsed),'result':result}), mimetype='application/json')
 
 
 @app.route("/drawgraph", methods=['GET'])

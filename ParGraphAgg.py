@@ -165,19 +165,24 @@ class ParGraphAgg(object):
             trips = self.g.find(paths).filter(
                 'x.id == '+str(X)).filter('y.id =='+str(Y))
             result = trips.select("x.id", "y.id").dropDuplicates()
-        elif(Z == 2):
+        if(Z == 2):
             paths = "(x)-[e]->(b); (b)-[e2]->(y)"
             trips = self.g.find(paths).filter(
                 'x.id == '+str(X)).filter('y.id =='+str(Y))
             result = trips.select("x.id", "b.id", "y.id").dropDuplicates()
-        else:
+        if(Z == 3):
             paths = "(x)-[e]->(b); (b)-[e2]->(c) ; (c)-[e3]->(y)"
             trips = self.g.find(paths).filter(
                 'x.id == '+str(X)).filter('y.id =='+str(Y))
             result = trips.select("x.id", "b.id", "c.id",
                                   "y.id").dropDuplicates()
 
-        return [(row, self.GetAirportNameFromAirportId(row)) for row in result.collect()[0]]
+        simple_path = result.collect()
+        
+        if(len(simple_path) > 0):
+            return [(row, self.GetAirportNameFromAirportId(row)) for row in simple_path[0]]
+        else:
+            return []
 
     def GetAirportNameFromAirportId(self, airport_id):
         query = """

@@ -166,7 +166,7 @@ class SeqGraphAgg(object):
                     explored.append(node) 
         
             return
-            
+
         graph_adj = self.graph
 
         found_path = []
@@ -194,7 +194,9 @@ class SeqGraphAgg(object):
         # paths_list.sort(key = lambda x: len(x))
 
         # return paths_list
-
+        X = int(X)
+        Y = int(Y)
+        Z = int(Z)
         graph_adj = self.graph
         visited = dict()
         for node in self.nodes:
@@ -221,8 +223,11 @@ class SeqGraphAgg(object):
         DFS(X, Y, Z)
 
         simple_path.sort(key=lambda x: len(x))
-
-        return simple_path
+        
+        if(len(simple_path) > 0):
+            return [(i, self.GetAirportNameFromAirportId(int(i))) for i in simple_path[0]]
+        else:
+            return []
 
     def FindDHopCities(self, X, d):
         """

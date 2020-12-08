@@ -131,6 +131,57 @@ class SeqGraphAgg(object):
 
         return (city_with_incoming_routes_list[:int(K)], city_with_outgoing_routes_list[:int(K)])
 
+    def FindTripXCityToYCity(self, X, Y):
+        airport_in_Xcity = []
+        for node in self.nodes:
+            if(node[1]['city'] == X):
+                airport_in_Xcity.append(node[0])
+
+        airport_in_Ycity = []
+        for node in self.nodes:
+            if(node[1]['city'] == Y):
+                airport_in_Ycity.append(node[0])
+
+        # print(airport_in_Xcity)
+        # print(airport_in_Ycity)
+
+        def BFS_SP(graph, start, goal): 
+            explored = [] 
+            queue = [[start]] 
+            
+            while queue: 
+                path = queue.pop(0) 
+                node = path[-1] 
+                
+                if node not in explored: 
+                    neighbours = graph[node] 
+                    
+                    for neighbour in neighbours: 
+                        new_path = list(path) 
+                        new_path.append(neighbour) 
+                        queue.append(new_path) 
+                        
+                        if neighbour == goal: 
+                            return new_path
+                    explored.append(node) 
+        
+            return
+            
+        graph_adj = self.graph
+
+        found_path = []
+        for airport_x in airport_in_Xcity:
+            for airport_y in airport_in_Ycity:
+                shortest_path = BFS_SP(graph_adj, airport_x, airport_y)
+                if(shortest_path is not None):
+                    found_path.append(shortest_path)
+
+        if(len(found_path) > 0):
+            found_path.sort(key=lambda x: len(x))
+            return [(i,self.GetAirportNameFromAirportId(i)) for i in found_path[0]]
+        else:
+            return []
+
     def FindTripXToYLessThanZ(self, X, Y, Z):
         """
         A method to find a trip that connects X and Y with less than Z stops (constrained reachability).
@@ -257,11 +308,13 @@ def main():
     # country_with_airports = sg.FindCountryHasHighestAirport()
     # print(country_with_airports)
 
-    topk_busy_incoming_city = sg.FindTopKBusyCity(10)[0]
-    topk_busy_outgoing_city = sg.FindTopKBusyCity(10)[1]
+    # topk_busy_incoming_city = sg.FindTopKBusyCity(10)[0]
+    # topk_busy_outgoing_city = sg.FindTopKBusyCity(10)[1]
 
-    print(topk_busy_incoming_city)
-    print(topk_busy_outgoing_city)
+    # print(topk_busy_incoming_city)
+    # print(topk_busy_outgoing_city)
+
+    print(sg.FindTripXCityToYCity("Seattle", "Pohang"))
 
     # print("Find a trip that connects X and Y with less than Z stops")
     # # seatac to pohang airport less than 3 stops

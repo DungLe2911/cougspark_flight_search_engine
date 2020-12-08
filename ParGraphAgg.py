@@ -127,7 +127,37 @@ class ParGraphAgg(object):
 
         return (topk_incoming_busy_city_list ,topk_outgoing_busy_city_list)
 
+    def FindTripXCityToYCity(self, X, Y):
+        query_x = """
+                  SELECT airport_id, city 
+                  FROM airports 
+                  WHERE city = "{}"
+                  """.format(X)
+        query_y = """
+                  SELECT airport_id, city 
+                  FROM airports 
+                  WHERE city = "{}"
+                  """.format(Y)
+
+        airport_in_Xcity = [row['airport_id'] for row in self.spark.sql(query_x).collect()]
+        airport_in_Ycity = [row['airport_id'] for row in self.spark.sql(query_y).collect()]
+
+        found_path = []
+        for airport_x in airport_in_Xcity:
+            distances = self.g.shortestPaths(landmarks = airport_in_Ycity).filter("id="+str(airport_x)).select('distances').collect()[0]['distances']
+            if(len(distances) > 0):
+                distances_list = list(distances.items())
+                distances_list.sort(key=lambda x:x[1])
+                found_path.append((airport_x, distances_list[0][0], distances_list[0][1]))
+        
+        if(len(found_path)>0):
+            found_path.sort(key=lambda x:x[2])
+            return self.FindTripXToYLessThanZ(found_path[0][0],found_path[0][1],found_path[0][2])
+        else:
+            return []
+
     def FindTripXToYLessThanZ(self, X, Y, Z):
+        Z = int(Z)
         assert (Z < 4 or Z > 0), "Z should be less than equal 3"
 
         if(Z == 1):
@@ -147,13 +177,13 @@ class ParGraphAgg(object):
             result = trips.select("x.id", "b.id", "c.id",
                                   "y.id").dropDuplicates()
 
-        return [row for row in result.collect()]
+        return [(row, self.GetAirportNameFromAirportId(row)) for row in result.collect()[0]]
 
-    def GetAirportNameFromId(self, airport_id):
+    def GetAirportNameFromAirportId(self, airport_id):
         query = """
                 SELECT DISTINCT name
                 FROM airports
-                WHERE airport_id == {}
+                WHERE airport_id == "{}"
                 """.format(airport_id)
 
         airport_name = self.spark.sql(query)
@@ -192,11 +222,13 @@ def main():
     # country_with_airports = pg.FindCountryHasHighestAirport()
     # print(country_with_airports)
 
-    topk_busy_incoming_city = pg.FindTopKBusyCity(10)[0]
-    topk_busy_outgoing_city = pg.FindTopKBusyCity(10)[1]
+    # topk_busy_incoming_city = pg.FindTopKBusyCity(10)[0]
+    # topk_busy_outgoing_city = pg.FindTopKBusyCity(10)[1]
 
-    print(topk_busy_incoming_city)
-    print(topk_busy_outgoing_city)
+    # print(topk_busy_incoming_city)
+    # print(topk_busy_outgoing_city)
+
+    print(pg.FindTripXCityToYCity("Seattle", "Hamhung"))
 
     # trips = pg.FindTripXToYLessThanZ(3577, 2380, 3)
     # for trip in trips:

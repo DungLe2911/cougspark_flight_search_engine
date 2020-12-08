@@ -118,6 +118,28 @@ def FindTopKBusyCityPar():
     elapsed = delta.total_seconds() * 1000
     return Response(json.dumps({'elapsed(ms)':elapsed, "size": len(res), 'par_result':{"incoming":res_in, "outgoing":res_out}}), mimetype='application/json')
 
+@app.route("/findtripxcitytoycityseq", methods=['GET'])
+def FindTripXCityToYCitySeq():
+    start = datetime.datetime.now()
+    X = request.args.get('x','')
+    Y = request.args.get('y','')
+    res = sga.FindTripXCityToYCity(X, Y)
+    end = datetime.datetime.now()
+    delta = end-start
+    elapsed = delta.total_seconds() * 1000
+    return Response(json.dumps({'elapsed(ms)':int(elapsed),'result':res}), mimetype='application/json')
+
+@app.route("/findtripxcitytoycitypar", methods=['GET'])
+def FindTripXCityToYCityPar():
+    start = datetime.datetime.now()
+    X = request.args.get('x','')
+    Y = request.args.get('y','')
+    res = pga.FindTripXCityToYCity(X, Y)
+    end = datetime.datetime.now()
+    delta = end-start
+    elapsed = delta.total_seconds() * 1000
+    return Response(json.dumps({'elapsed(ms)':int(elapsed),'result':res}), mimetype='application/json')
+
 @app.route("/findtripxtoylessthanz", methods=['GET'])
 def FindTripXToYLessThanZ():
     start = datetime.datetime.now()
@@ -129,7 +151,7 @@ def FindTripXToYLessThanZ():
     for trip in trips:
         trip_list = {}
         for apid in trip:
-            trip_list[apid]=pga.GetAirportNameFromId(apid)
+            trip_list[apid]=pga.GetAirportNameFromAirportId(apid)
         res.append(trip_list)
     end = datetime.datetime.now()
     delta = end-start

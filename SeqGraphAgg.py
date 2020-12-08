@@ -31,8 +31,8 @@ class SeqGraphAgg(object):
             self.nodes.append((i, r.to_dict()))
         for i, r in self.routes.set_index(['src_id', 'dst_id']).iterrows():
             self.edges.append((i[0], i[1], r.to_dict()))
-        # print('node ex: {}'.format(self.nodes[0]))
-        # print('edge ex: {}'.format(self.edges[0]))
+        print('node ex: {}'.format(self.nodes[0]))
+        print('edge ex: {}'.format(self.edges[0]))
 
         self.graph = self._CreateAdjacencyListGraph()
 
@@ -90,6 +90,46 @@ class SeqGraphAgg(object):
         country_with_airports_list = list(country_with_airports_dict.items())
         country_with_airports_list.sort(key=lambda x: x[1], reverse=True)
         return country_with_airports_list[:10]
+
+    def FindTopKBusyCity(self, K):
+        airport_with_incoming_routes_dict = {}
+        airport_with_outgoing_routes_dict = {}
+        for edge in self.edges:
+            incoming = edge[1]
+            outgoing = edge[0]
+            if(incoming in airport_with_incoming_routes_dict.keys()):
+                airport_with_incoming_routes_dict[incoming] = airport_with_incoming_routes_dict.get(incoming) + 1
+            else:
+                airport_with_incoming_routes_dict[incoming] = 1
+            if(outgoing in airport_with_outgoing_routes_dict.keys()):
+                airport_with_outgoing_routes_dict[outgoing] = airport_with_outgoing_routes_dict.get(outgoing) + 1
+            else:
+                airport_with_outgoing_routes_dict[outgoing] = 1
+
+        city_with_incoming_routes_dict = {}
+        city_with_outgoing_routes_dict = {}
+
+
+        for k, v in airport_with_incoming_routes_dict.items():
+            incoming_city = self.airports.set_index('airport_id').at[int(k),'city']
+            if(incoming_city in city_with_incoming_routes_dict.keys()):
+                city_with_incoming_routes_dict[incoming_city] = city_with_incoming_routes_dict[incoming_city] + v
+            else:
+                city_with_incoming_routes_dict[incoming_city] = v
+
+        for k2, v2 in airport_with_outgoing_routes_dict.items():
+            outgoing_city = self.airports.set_index('airport_id').at[int(k2),'city']
+            if(outgoing_city in city_with_outgoing_routes_dict.keys()):
+                city_with_outgoing_routes_dict[outgoing_city] = city_with_outgoing_routes_dict[outgoing_city] + v2
+            else:
+                city_with_outgoing_routes_dict[outgoing_city] = v2
+
+        city_with_incoming_routes_list = list(city_with_incoming_routes_dict.items())
+        city_with_incoming_routes_list.sort(key=lambda x: x[1], reverse = True)
+        city_with_outgoing_routes_list = list(city_with_outgoing_routes_dict.items())
+        city_with_outgoing_routes_list.sort(key=lambda x: x[1], reverse = True)
+
+        return (city_with_incoming_routes_list[:int(K)], city_with_outgoing_routes_list[:int(K)])
 
     def FindTripXToYLessThanZ(self, X, Y, Z):
         """
@@ -214,8 +254,14 @@ def main():
     # airlines_with_codeshare = sg.FindAirlineWithCodeShare()
     # print(airlines_with_codeshare)
 
-    country_with_airports = sg.FindCountryHasHighestAirport()
-    print(country_with_airports)
+    # country_with_airports = sg.FindCountryHasHighestAirport()
+    # print(country_with_airports)
+
+    topk_busy_incoming_city = sg.FindTopKBusyCity(10)[0]
+    topk_busy_outgoing_city = sg.FindTopKBusyCity(10)[1]
+
+    print(topk_busy_incoming_city)
+    print(topk_busy_outgoing_city)
 
     # print("Find a trip that connects X and Y with less than Z stops")
     # # seatac to pohang airport less than 3 stops

@@ -91,17 +91,17 @@
                 </form>
             </li>
             <li><b>Find top K cities with most incoming/outgoing airlines</b>
-                <form method="get" class="form-inline" action="/findairportincountryseq">
+                <form method="get" class="form-inline" action="/findtopkbusycityseq">
                     <div class="form-group">
-                        <label for="q5">Top X</label>
-                        <input name="x" id="x" required>
+                        <label for="q5">Top K</label>
+                        <input name="k" id="k" required>
                         <button type="submit">Seq</button>
                     </div>
                 </form>
-                <form method="get" class="form-inline" action="/findairportincountrypar">
+                <form method="get" class="form-inline" action="/findtopkbusycitypar">
                     <div class="form-group">
-                        <label for="q5">Top X</label>
-                        <input name="x" id="x" required>
+                        <label for="q5">Top K</label>
+                        <input name="k" id="k" required>
                         <button type="submit">Par</button>
                     </div>
                 </form>

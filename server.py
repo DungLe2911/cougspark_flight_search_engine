@@ -93,6 +93,31 @@ def FindCountryHasHighestAirportPar():
     elapsed = delta.total_seconds() * 1000
     return Response(json.dumps({'elapsed(ms)':elapsed, "size": len(res), 'par_result':res}), mimetype='application/json')
 
+@app.route("/findtopkbusycityseq", methods=['GET'])
+def FindTopKBusyCitySeq():
+    start = datetime.datetime.now()
+    K = request.args.get('k','')
+    res = sga.FindTopKBusyCity(K)
+    res_in = res[0]
+    res_out = res[1]
+    end = datetime.datetime.now()
+    delta = end-start
+    elapsed = delta.total_seconds() * 1000
+    print(res)
+    return Response(json.dumps({'elapsed(ms)':elapsed, "size": len(res), 'seq_result':{"incoming":res_in, "outgoing":res_out}}), mimetype='application/json')
+
+@app.route("/findtopkbusycitypar", methods=['GET'])
+def FindTopKBusyCityPar():
+    start = datetime.datetime.now()
+    K = request.args.get('k','')
+    res = pga.FindTopKBusyCity(K)
+    res_in = res[0]
+    res_out = res[1]
+    end = datetime.datetime.now()
+    delta = end-start
+    elapsed = delta.total_seconds() * 1000
+    return Response(json.dumps({'elapsed(ms)':elapsed, "size": len(res), 'par_result':{"incoming":res_in, "outgoing":res_out}}), mimetype='application/json')
+
 @app.route("/findtripxtoylessthanz", methods=['GET'])
 def FindTripXToYLessThanZ():
     start = datetime.datetime.now()

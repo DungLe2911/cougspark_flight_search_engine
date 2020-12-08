@@ -95,6 +95,38 @@ class ParGraphAgg(object):
         
         return country_with_airports_list
 
+    def FindTopKBusyCity(self, K):
+        indegree_df = self.g.inDegrees
+        outdegree_df = self.g.outDegrees
+
+        airports_joined = self.airports.join(indegree_df, self.airports.airport_id == indegree_df.id, 'inner').drop(indegree_df.id)
+        airports_joined = airports_joined.join(outdegree_df, self.airports.airport_id == outdegree_df.id, 'inner').drop(outdegree_df.id)
+        airports_joined.createOrReplaceTempView("airports_joined")
+
+        query_in = """
+                   SELECT city, SUM(inDegree) as incoming
+                   FROM airports_joined
+                   GROUP BY city
+                   ORDER BY incoming DESC
+                   """
+        
+        topk_incoming_busy_city_df = self.spark.sql(query_in)
+        # topk_incoming_busy_city_df.show()
+        query_out = """
+                   SELECT city, SUM(outDegree) as outgoing
+                   FROM airports_joined
+                   GROUP BY city
+                   ORDER BY outgoing DESC
+                   """
+        
+        topk_outgoing_busy_city_df = self.spark.sql(query_out)
+        # topk_outgoing_busy_city_df.show()
+
+        topk_incoming_busy_city_list = [(row['city'],row['incoming']) for row in topk_incoming_busy_city_df.collect()[:int(K)]]
+        topk_outgoing_busy_city_list = [(row['city'],row['outgoing']) for row in topk_outgoing_busy_city_df.collect()[:int(K)]]
+
+        return (topk_incoming_busy_city_list ,topk_outgoing_busy_city_list)
+
     def FindTripXToYLessThanZ(self, X, Y, Z):
         assert (Z < 4 or Z > 0), "Z should be less than equal 3"
 
@@ -157,8 +189,14 @@ def main():
     # airlines_with_codeshare = pg.FindAirlineWithCodeShare()
     # print(airlines_with_codeshare)
 
-    country_with_airports = pg.FindCountryHasHighestAirport()
-    print(country_with_airports)
+    # country_with_airports = pg.FindCountryHasHighestAirport()
+    # print(country_with_airports)
+
+    topk_busy_incoming_city = pg.FindTopKBusyCity(10)[0]
+    topk_busy_outgoing_city = pg.FindTopKBusyCity(10)[1]
+
+    print(topk_busy_incoming_city)
+    print(topk_busy_outgoing_city)
 
     # trips = pg.FindTripXToYLessThanZ(3577, 2380, 3)
     # for trip in trips:

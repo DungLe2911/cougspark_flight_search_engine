@@ -1,5 +1,6 @@
 import os
 from pyspark.sql import SparkSession
+from pyspark.sql.functions import col
 from pyspark import SparkFiles, SparkContext
 from graphframes import *
 
@@ -9,6 +10,7 @@ class ParGraphAgg(object):
         self.path = os.path.join("./datasets", directory)
         self.spark = SparkSession.builder.appName(
             "space-flight-search").master('spark://d7a5fdf2eacc:7077').getOrCreate()
+        self.spark.sparkContext.setCheckpointDir('./checkpoints')
         self._AddFile()
         self._ReadFile()
         self._CreateGraph()
@@ -212,10 +214,15 @@ class ParGraphAgg(object):
             for airport in airports_in_xcity:
                 trips = self.g.find(paths).filter("x.id == "+str(airport)).filter("y.id !="+str(airport))
                 cities.extend([row['city'] for row in trips.select("y.city", "y.country").dropDuplicates().collect()])
-                
+
         cities = list(set(cities))
         cities.sort()
         return cities
+
+    def ConnectedComponent(self):
+        result = self.g.connectedComponents()
+        result_df = result.select("id", "component").orderBy(col('component')).take(20)
+        return [(row['id'],row['component']) for row in result_df]
 
     def GetAirportNameFromAirportId(self, airport_id):
         query = """
@@ -251,7 +258,9 @@ def main():
     # print(pg.FindTripXCityToYCity("Seattle", "Hamhung"))
     # trips = pg.FindTripXToYLessThanZ(3577, 2380, 3)
 
-    print(pg.FindDHopCities(1, 'Seattle'))
+    # print(pg.FindDHopCities(1, 'Seattle'))
+
+    print(pg.ConnectedComponent())
 
     
 

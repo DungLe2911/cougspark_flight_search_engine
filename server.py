@@ -211,22 +211,29 @@ def FindDHopCitiesPar():
     elapsed = delta.total_seconds() * 1000
     return Response(json.dumps({'elapsed(ms)': int(elapsed), "size": len(res), 'result': res}), mimetype='application/json')
 
+@app.route("/connectedcomponents", methods=['GET'])
+def ConnectedComponents():
+    start = datetime.datetime.now()
+    res = pga.ConnectedComponent()
+    end = datetime.datetime.now()
+    delta = end-start
+    elapsed = delta.total_seconds() * 1000
+    return Response(json.dumps({'elapsed(ms)': int(elapsed), "size": len(res), 'result': res}), mimetype='application/json')
 
-@app.route("/drawgraph", methods=['GET'])
-def DrawGraph():
-    # declare the center of the map, and how much we want the map zoomed in
-    geo_lat = [47.449001, 37.469101, 35.987955]
-    geo_lon = [-122.308998, 126.450996, 129.420383]
-    geo_lat2 = [47.449001, 35.987955]
-    geo_lon2 = [-122.308998, 129.420383]
+
+@app.route("/toyapp", methods=['GET'])
+def ToyApp():
+    X = request.args.get('x', '')
+    Y = request.args.get('y', '')
+    flights = sga.ToyApp(X, Y)
     gmap = gmplot.GoogleMapPlotter(0, 180, 3)
-    # plot heatmap
-    gmap.plot(geo_lat, geo_lon, edge_width=3.0)
-    gmap.plot(geo_lat2, geo_lon2, edge_width=3.0)
+    gmap.plot(flights[0][0], flights[0][1], 'red', edge_width=3.0)
+    for i in range(1, len(flights)):
+        gmap.plot(flights[i][0], flights[i][1], 'cornflowerblue', edge_width=2.0)
     # Your Google_API_Key
     gmap.apikey = "AIzaSyBrJkwsZLNnwLCwM5Ae-38M_Ua9ngn4Xts"
     # save it to html
-    gmap.draw(r"./result.html")
+    gmap.draw(r"result.html")
     return send_from_directory(".", "result.html")
 
 

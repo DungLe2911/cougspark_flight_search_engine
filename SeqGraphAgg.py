@@ -294,6 +294,48 @@ class SeqGraphAgg(object):
         """
         return self.airports.set_index('airport_id').loc[airprot_id]['city']
 
+    def ToyApp(self, X, Y):
+        airport_in_Xcity = []
+        for node in self.nodes:
+            if(node[1]['city'] == X):
+                airport_in_Xcity.append(node[0])
+
+        airport_in_Ycity = []
+        for node in self.nodes:
+            if(node[1]['city'] == Y):
+                airport_in_Ycity.append(node[0])
+
+        G = nx.Graph()
+        G.add_nodes_from(self.nodes)
+        G.add_edges_from(self.edges)
+
+        found_path = []
+        for airport_x in airport_in_Xcity:
+            for airport_y in airport_in_Ycity:
+                shortest_path = list(nx.all_simple_paths(G, airport_x, airport_y, 3))
+                if(len(shortest_path) >0):
+                    found_path.extend(shortest_path)
+
+        found_path.sort(key=lambda x:len(x))
+
+        if(len(found_path) > 0):
+            found_path.sort(key=lambda x: len(x))
+            plots = []
+            for path in found_path[:5]:
+                lat = []
+                lon = []
+                for i in path:
+                    lat.append(self.GetLatitudeFromAirportId(i))
+                    lon.append(self.GetLongitudeFromAirportId(i))
+                plots.append((lat,lon))
+            return plots
+        else:
+            return []
+
+    def GetLatitudeFromAirportId(self, airport_id):
+        return self.airports.set_index('airport_id').at[int(airport_id), "latitude"]
+    def GetLongitudeFromAirportId(self, airport_id):  
+        return self.airports.set_index('airport_id').at[int(airport_id), "longitude"]
 
 def main():
     print("Load files and initalize graphs")
@@ -339,12 +381,14 @@ def main():
     #     print()
 
     # start = datetime.datetime.now()
-    print(sg.FindDHopCities(1, 'Seattle'))
+    # print(sg.FindDHopCities(1, 'Seattle'))
     # end = datetime.datetime.now()
     # delta = end-start
     # elipsed = int(delta.total_seconds() * 1000)
     # print("elipsed:",elipsed)
     # print(cities_from_d_hop)
+
+    print(sg.ToyApp("Seattle", "Pohang"))
 
 
 if __name__ == '__main__':

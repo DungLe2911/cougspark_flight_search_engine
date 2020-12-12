@@ -2,7 +2,7 @@
 
 ![space_fligh_search](/static/enriched_diagram_3d_2.png)
 
-## 1. introduction
+## 1. Introduction
 This project implements a flight search engine using a graph algorithm.
 
 Datasets provided from [openflights.org](https://openflights.org/data.html).
@@ -47,7 +47,7 @@ For testing under the deployment environment, follow below steps.
    ```
 
 6. Here are two options to run the application
-   1. run web server to see front end web page to test 
+   1. run web server to see front end web page in ```<your host ip address>:5000```
       ```sh
       # run flask web server with spark-submit command
       start-server.sh

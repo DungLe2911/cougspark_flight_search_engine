@@ -3,7 +3,9 @@
 ![space_fligh_search](/static/enriched_diagram_3d_2.png)
 
 ## 1. introduction
-This project implements a flight search engine using a graph data structure by datasets provided from openflights.org.
+This project implements a flight search engine using a graph algorithm.
+
+Datasets provided from [openflights.org](https://openflights.org/data.html).
 
 ## 2. Usage
 We use Docker containers to configure our development and deployment environment.

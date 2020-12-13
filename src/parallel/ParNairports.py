@@ -11,6 +11,7 @@ import time
 import os
 from pyspark.sql import SparkSession
 from pyspark import SparkContext, SparkFiles
+from pyspark.sql.functions import *
 
 spark = SparkSession.builder.appName("cpts415-bigdata").master('spark://ip-172-31-59-32.us-west-2.compute.internal:7077').getOrCreate()
 # spark = SparkSession.builder.appName("Nur-job").master('local[*]').getOrCreate()
